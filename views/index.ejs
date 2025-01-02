@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact App</title>
+  </head>
+  <body>
+    <h1>Contact App</h1>
+    <form action="/index" method="POST">
+      <input
+        type="text"
+        name="person"
+        placeholder="Person's name..."
+        required
+      />
+      <input
+        type="text"
+        name="number"
+        placeholder="Person's number..."
+        required
+      />
+      <button type="submit">Save</button>
+    </form>
+
+    <h2>Saved Entries</h2>
+    <ul>
+      <% entries.forEach(entry => { %>
+      <li><%= entry.name %> - <%= entry.number %></li>
+      <% }) %>
+    </ul>
+  </body>
+</html>
