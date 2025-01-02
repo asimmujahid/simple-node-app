@@ -7,8 +7,11 @@ const wikip = require('wiki-infobox-parser');
 app.set("view engine", 'ejs');
 
 //routes
+const port = process.env.PORT || 3000;
 app.get('/', (req,res) =>{
     res.render('index');
+    console.log(`req on port: ${port}`);
+    
 });
 
 app.get('/index', (req,response) =>{
@@ -50,4 +53,8 @@ app.get('/index', (req,response) =>{
 });
 
 //port
-app.listen(3000, console.log("Listening at port 3000..."))
+
+app.listen(port, ()=>{
+    console.log(`listening on port: ${port}`)
+    }
+    )
