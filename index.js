@@ -1,60 +1,65 @@
-const express = require('express');
+const express = require("express");
+const mysql = require("mysql2");
+const bodyParser = require("body-parser");
+
 const app = express();
-const request = require('request');
-const wikip = require('wiki-infobox-parser');
 
-//ejs
-app.set("view engine", 'ejs');
+// MySQL Connection Setup
+const db = mysql.createConnection({
+  host: "localhost", // Change this if your MySQL server is remote
+  user: "root", // Replace with your MySQL username
+  password: "lovehaterz", // Replace with your MySQL password
+  database: "contacts_app", // Database name
+});
 
-//routes
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to MySQL:", err.message);
+    process.exit(1); // Exit if the database connection fails
+  }
+  console.log("Connected to MySQL database.");
+});
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.set("view engine", "ejs");
+
+// Routes
+
+// GET: Render index page with data
+app.get("/", (req, res) => {
+  const sql = "SELECT * FROM contacts";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).send("Database error");
+      return;
+    }
+    res.render("index", { entries: results }); // Pass results as "entries" to EJS
+  });
+});
+
+// POST: Save name and number to database
+app.post("/index", (req, res) => {
+  const { person, number } = req.body;
+  if (!person || !number) {
+    res.status(400).send("Name and number are required");
+    return;
+  }
+
+  const sql = "INSERT INTO contacts (name, number) VALUES (?, ?)";
+  db.query(sql, [person, number], (err) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).send("Database error");
+      return;
+    }
+    res.redirect("/"); // Redirect to the home page after saving
+  });
+});
+
+// Start server
 const port = process.env.PORT || 3000;
-app.get('/', (req,res) =>{
-    res.render('index');
-    console.log(`req on port: ${port}`);
-    
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
-
-app.get('/index', (req,response) =>{
-    let url = "https://en.wikipedia.org/w/api.php"
-    let params = {
-        action: "opensearch",
-        search: req.query.person,
-        limit: "1",
-        namespace: "0",
-        format: "json"
-    }
-
-    url = url + "?"
-    Object.keys(params).forEach( (key) => {
-        url += '&' + key + '=' + params[key]; 
-    });
-
-    //get wikip search string
-    request(url,(err,res, body) =>{
-        if(err) {
-            response.redirect('404');
-        }
-            result = JSON.parse(body);
-            x = result[3][0];
-            x = x.substring(30, x.length); 
-            //get wikip json
-            wikip(x , (err, final) => {
-                if (err){
-                    response.redirect('404');
-                }
-                else{
-                    const answers = final;
-                    response.send(answers);
-                }
-            });
-    });
-
-    
-});
-
-//port
-
-app.listen(port, ()=>{
-    console.log(`listening on port: ${port}`)
-    }
-    )
