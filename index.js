@@ -6,9 +6,9 @@ const app = express();
 
 // MySQL Connection Setup
 const db = mysql.createConnection({
-  host: "localhost", // Change this if your MySQL server is remote
-  user: "root", // Replace with your MySQL username
-  password: "lovehaterz", // Replace with your MySQL password
+  host: process.env.DB_HOST, //Change this if your MySQL server is remote
+  user:process.env.DB_USER, // Replace with your MySQL username
+  password: process.env.DB_PASSWORD, //Replace with your MySQL password
   database: "contacts_app", // Database name
 });
 
