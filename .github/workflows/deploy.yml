@@ -34,9 +34,7 @@ jobs:
             set -e
             echo "Pulling latest changes on EC2"
             cd ${{ env.EC2_APP_PATH }}
-            git reset --hard
-            git pull origin main
-            echo "Installing dependencies"
+            touch a.txt
             npm install 
             echo "Restarting application"
             pm2 restart app || pm2 start index.js --name app
