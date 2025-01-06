@@ -28,6 +28,7 @@ jobs:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ secrets.AWS_EC }}
+          timeout: 60
           port: 22
           script: |
             set -e
