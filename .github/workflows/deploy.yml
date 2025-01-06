@@ -15,7 +15,7 @@ jobs:
       EC2_APP_PATH: '/home/ubuntu/simple-node-app' 
 
     steps:
-      - name: Checkout Code
+      - name: Checkoutt Code
         uses: actions/checkout@v3
 
       - name: Install Dependencie
