@@ -9,6 +9,10 @@ jobs:
   deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    env:
+      EC2_HOST: '16.51.1.0'        
+      EC2_USER: 'ubuntu'            
+      EC2_APP_PATH: '/home/ubuntu/simple-node-app' 
 
     steps:
       - name: Checkout Code
@@ -21,14 +25,14 @@ jobs:
       - name: SSH into EC2 instace and Deploy
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ secrets.AWS_EC }}
           port: 22
           script: |
             set -e
             echo "Pulling latest changes on EC2"
-            cd ${{ secrets.EC2_APP_PATH }}
+            cd ${{ env.EC2_APP_PATH }}
             git reset --hard
             git pull origin main
             echo "Installing dependencies"
