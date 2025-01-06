@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
 
-      - name: SSH into EC2 instace and Deploy
+      - name: SSH into EC2 instace and Deployy
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ env.EC2_HOST }}
