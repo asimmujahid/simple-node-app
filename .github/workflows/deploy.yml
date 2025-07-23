@@ -10,19 +10,18 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     env:
-      EC2_HOST: "ec2-98-84-183-94.compute-1.amazonaws.com"        
-      EC2_USER: "ubuntu"       
-      EC2_APP_PATH: "/home/ubuntu/simple-node-app/" 
+      EC2_HOST: "ec2-98-84-183-94.compute-1.amazonaws.com"
+      EC2_USER: "ubuntu"
+      EC2_APP_PATH: "/home/ubuntu/simple-node-app/"
 
     steps:
-      - name: Checkoutt Code
+      - name: Checkout Code   # fixed typo
         uses: actions/checkout@v3
 
-      - name: Install Dependencie
+      - name: Install Dependencies  # fixed typo
         run: npm install
 
-
-      - name: SSH into EC2 instace and Deployy
+      - name: SSH into EC2 instance and Deploy  # fixed typos
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ env.EC2_HOST }}
@@ -34,6 +33,7 @@ jobs:
             set -e
             echo "Pulling latest changes on EC2"
             cd ${{ env.EC2_APP_PATH }}
-            npm install 
+            git pull origin main
+            npm install
             echo "Restarting application"
             pm2 restart app || pm2 start index.js --name app
