@@ -4,15 +4,15 @@ const bodyParser = require("body-parser");
 require('dotenv').config();
 const app = express();
 
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST, 
-  user:process.env.DB_USER, 
-  password: process.env.DB_PASSWORD, 
-  database: "contacts_app", 
+// MySQL Connection
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
-db.connect((err) => {
+connection.connect((err) => {
   if (err) {
     console.error("Error connecting to MySQL:", err.message);
     process.exit(1); // Exit if the database connection fails
@@ -29,7 +29,7 @@ app.set("view engine", "ejs");
 // GET: Render index page with data
 app.get("/", (req, res) => {
   const sql = "SELECT * FROM contacts";
-  db.query(sql, (err, results) => {
+  connection.query(sql, (err, results) => {
     if (err) {
       console.error(err.message);
       res.status(500).send("Database error");
@@ -48,7 +48,7 @@ app.post("/index", (req, res) => {
   }
 
   const sql = "INSERT INTO contacts (name, number) VALUES (?, ?)";
-  db.query(sql, [person, number], (err) => {
+  connection.query(sql, [person, number], (err) => {
     if (err) {
       console.error(err.message);
       res.status(500).send("Database error");
@@ -61,5 +61,6 @@ app.post("/index", (req, res) => {
 // Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Serverr is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
+
