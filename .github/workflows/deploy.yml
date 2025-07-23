@@ -10,7 +10,7 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     env:
-      EC2_HOST: "ec2-16-171-231-5.eu-north-1.compute.amazonaws.com"        
+      EC2_HOST: "ec2-98-84-183-94.compute-1.amazonaws.com"        
       EC2_USER: "ubuntu"       
       EC2_APP_PATH: "/home/ubuntu/simple-node-app/" 
 
@@ -27,7 +27,7 @@ jobs:
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ${{ secrets.AWS_EC }}
+          key: ${{ secrets.EC2_KEY }}
           timeout: 60s
           port: 22
           script: |
